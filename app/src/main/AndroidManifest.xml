@@ -10,6 +10,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/Translucent" />
+        <activity
+            android:name=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,13 +24,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegisterActivity"
-            android:theme="@style/Translucent" />
-        <activity android:name=".HomeActivity" />
-        <activity
             android:name=".OTPVerifyActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ForgotPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddChannelActivity"
+            android:label="@string/title_activity_add_channel"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreateChannelActivity"
+            android:label="@string/title_activity_create_channel"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CreateChannel2Activity"
+            android:label="@string/title_activity_create_channel2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
