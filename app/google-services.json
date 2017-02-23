@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "363160377181",
+    "firebase_url": "https://thingspeak-ec77a.firebaseio.com",
+    "project_id": "thingspeak-ec77a",
+    "storage_bucket": "thingspeak-ec77a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363160377181:android:32dc231cf2958de9",
+        "android_client_info": {
+          "package_name": "aditya.thingspeak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363160377181-3fcbf1o6h714b5im24v75os8sugbh51l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "aditya.thingspeak",
+            "certificate_hash": "c2eba7012018f62da374fb38c3843122a183420d"
+          }
+        },
+        {
+          "client_id": "363160377181-0qgm1qkkr2tm07aa58pqjh4mk3fn9ulh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTBunJ08l9uH2jY_TG776MIh9ePxcg89w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363160377181-0qgm1qkkr2tm07aa58pqjh4mk3fn9ulh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
