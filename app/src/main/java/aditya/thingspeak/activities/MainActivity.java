@@ -1,4 +1,4 @@
-package aditya.thingspeak;
+package aditya.thingspeak.activities;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -22,8 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+
+import aditya.thingspeak.R;
 
 
 public class MainActivity extends AppCompatActivity {

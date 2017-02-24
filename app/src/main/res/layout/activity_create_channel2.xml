@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="aditya.thingspeak.CreateChannel2Activity">
+    tools:context=".activities.CreateChannel2Activity">
 
 
     <include layout="@layout/content_create_channel2" />

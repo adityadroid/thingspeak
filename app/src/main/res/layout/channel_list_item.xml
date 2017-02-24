@@ -7,8 +7,13 @@
     card_view:cardUseCompatPadding="true"
     android:layout_margin="8dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:padding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_marginBottom="35dp"
+        android:id="@+id/upperContentLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -112,7 +117,11 @@
 
 
         </LinearLayout>
+
+
+    </LinearLayout>
         <LinearLayout
+            android:layout_alignParentBottom="true"
             android:weightSum="1"
             android:layout_marginTop="6dp"
             android:orientation="horizontal"
@@ -147,7 +156,5 @@
                 />
 
         </LinearLayout>
-
-    </LinearLayout>
-
+</RelativeLayout>
 </android.support.v7.widget.CardView>

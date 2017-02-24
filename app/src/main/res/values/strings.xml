@@ -33,5 +33,14 @@
 
     <string name="channel_name">Channel Name</string>
     <string name="channel_description">Channel Description</string>
+    <string name="cancel">CANCEL</string>
+    <string name="done">DONE</string>
+    <string name="channel_id">Channel ID</string>
+    <string name="channel_url">Channel URL</string>
+    <string-array name="sort_array">
+        <item>My</item>
+        <item>Public</item>
+        <item>Personal</item>
+    </string-array>
 
 </resources>

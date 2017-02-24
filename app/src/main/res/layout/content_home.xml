@@ -1,19 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg"
+    android:orientation="vertical"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_home">
+    <org.honorato.multistatetogglebutton.MultiStateToggleButton
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/home_choose_channel_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
 
+        mstb:values="@array/sort_array"
+        mstb:mstbPrimaryColor="@color/colorPrimary"
+        mstb:mstbSecondaryColor="@android:color/white"/>
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/expandableLayoutHome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ael_expanded="false"
+        app:ael_duration="500"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/white"
+        app:ael_interpolator="decelerate"
+        app:ael_orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:id="@+id/addChannelLayout"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:textColorHint="#c5c5c5"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:textSize="15sp"
+                android:hint="@string/channel_id"
+                android:textColor="#2fa881"
+                android:id="@+id/home_add_channel_id"
+                android:maxLines="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_bg_edit"
+                android:textCursorDrawable="@drawable/bg_input_cursor"
+                android:paddingBottom="2dp"
+                />
+        </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:textColorHint="#c5c5c5"
+                android:paddingLeft="30dp"
+                android:paddingTop="30dp"
+                android:paddingRight="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:textSize="15sp"
+                    android:hint="@string/channel_url"
+                    android:textColor="#2fa881"
+                    android:id="@+id/home_add_channel_url"
+                    android:maxLines="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_bg_edit"
+                    android:textCursorDrawable="@drawable/bg_input_cursor"
+                    android:paddingBottom="2dp"
+                    />
+            </android.support.design.widget.TextInputLayout>
+        <RelativeLayout
+            android:layout_marginTop="20dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:padding="4dp"
+                android:textAlignment="center"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:text="@string/cancel"
+                android:clickable="true"
+                android:gravity="center"
+                android:id="@+id/home_add_channel_cancel"
+                android:textColor="@color/colorAccent"
+                android:layout_toLeftOf="@+id/home_add_channel_done"
+                android:background="?attr/selectableItemBackground"/>
+            <Button
+                android:layout_alignParentEnd="true"
+                android:id="@+id/home_add_channel_done"
+                android:background="@color/colorPrimary"
+                android:stateListAnimator="@drawable/state_list_animator_z"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:text="@string/done"
+                android:textColor="@android:color/white"
+                >
+            </Button>
+
+        </RelativeLayout>
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:padding="10dp"
         android:background="@drawable/bg"
         android:layout_width="match_parent"
         android:id="@+id/channel_recycler"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+        android:layout_height="match_parent">
+        <requestFocus/>
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

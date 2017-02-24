@@ -1,4 +1,4 @@
-package aditya.thingspeak;
+package aditya.thingspeak.models;
 
 /**
  * Created by adi on 2/23/17.
@@ -10,13 +10,26 @@ public class ChannelObject {
     public String val2;
     public String val3;
     public String val4;
-    public ChannelObject(String channelName,String channelDesc,String val1, String val2, String val3, String val4){
+    public String channelID;
+    public ChannelObject(){
+
+    }
+    public ChannelObject(String channelName,String channelDesc,String val1, String val2, String val3, String val4,String channelID){
         this.channelDesc= channelDesc;
         this.channelName = channelName;
         this.val1 = val1;
         this.val2= val2;
         this.val3= val3;
         this.val4= val4;
+        this.channelID = channelID;
+    }
+
+    public String getChannelID() {
+        return channelID;
+    }
+
+    public void setChannelID(String channelID) {
+        this.channelID = channelID;
     }
 
     public String getChannelDesc() {

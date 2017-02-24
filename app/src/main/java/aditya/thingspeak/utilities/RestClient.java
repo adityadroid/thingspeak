@@ -1,4 +1,4 @@
-package aditya.thingspeak;
+package aditya.thingspeak.utilities;
 
 import android.content.Context;
 import android.util.Log;

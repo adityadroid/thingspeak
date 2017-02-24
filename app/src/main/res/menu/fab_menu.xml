@@ -5,6 +5,10 @@
         android:icon="@android:drawable/ic_menu_add"
         android:title="Add Channel" />
     <item
+        android:id="@+id/action_create_channel"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Create Channel" />
+    <item
         android:id="@+id/action_settings"
         android:icon="@android:drawable/ic_menu_set_as"
         android:title="Settings"/>

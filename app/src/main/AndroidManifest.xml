@@ -9,13 +9,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RegisterActivity"
+            android:name=".activities.RegisterActivity"
             android:theme="@style/Translucent" />
         <activity
-            android:name=".HomeActivity"
+            android:name=".activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,21 +24,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OTPVerifyActivity"
+            android:name=".activities.OTPVerifyActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".activities.ForgotPasswordActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddChannelActivity"
+            android:name=".activities.AddChannelActivity"
             android:label="@string/title_activity_add_channel"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CreateChannelActivity"
+            android:name=".activities.CreateChannelActivity"
             android:label="@string/title_activity_create_channel"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CreateChannel2Activity"
+            android:name=".activities.CreateChannel2Activity"
             android:label="@string/title_activity_create_channel2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

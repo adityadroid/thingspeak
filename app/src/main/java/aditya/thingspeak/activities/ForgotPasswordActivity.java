@@ -1,4 +1,4 @@
-package aditya.thingspeak;
+package aditya.thingspeak.activities;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+
+import aditya.thingspeak.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 

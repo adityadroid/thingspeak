@@ -1,9 +1,8 @@
-package aditya.thingspeak;
+package aditya.thingspeak.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +19,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.msg91.sendotp.library.SendOtpVerification;
-import com.msg91.sendotp.library.VerificationListener;
+import aditya.thingspeak.R;
 
 
 public class RegisterActivity extends AppCompatActivity {
