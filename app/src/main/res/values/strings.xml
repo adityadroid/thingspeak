@@ -47,5 +47,7 @@
         <item>Feed</item>
     </string-array>
     <string name="title_activity_channel_details">ChannelDetailsActivity</string>
-
+    <string name="min_value">Minimum Value</string>
+    <string name="max_value">Maximum Value</string>
+    <string name="subscribe">SUBSCRIBE</string>
 </resources>

@@ -6,10 +6,16 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@drawable/bg"
 android:orientation="vertical"
-app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
 tools:showIn="@layout/activity_field_graph">
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         android:layout_margin="10dp"
         android:layout_width="match_parent"
@@ -34,8 +40,78 @@ tools:showIn="@layout/activity_field_graph">
                 android:id="@+id/attr_details_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <com.github.aakira.expandablelayout.ExpandableLinearLayout
+                app:ael_expanded="false"
+                app:ael_duration="500"
+                android:weightSum="1"
+                android:id="@+id/subs_expandable_layout"
+                android:background="@android:color/white"
+                app:ael_interpolator="decelerate"
+                app:ael_orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_weight=".5"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:textColorHint="#c5c5c5"
+                    android:paddingLeft="30dp"
+                    android:paddingRight="30dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:inputType="number"
+                        android:textSize="15sp"
+                        android:hint="@string/min_value"
+                        android:textColor="#2fa881"
+                        android:id="@+id/subs_field_min_val"
+                        android:maxLines="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bg_edit"
+                        android:textCursorDrawable="@drawable/bg_input_cursor"
+                        android:paddingBottom="2dp"
+                        />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:textColorHint="#c5c5c5"
+                   android:layout_weight=".5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:inputType="number"
+                        android:textSize="15sp"
+                        android:hint="@string/max_value"
+                        android:textColor="#2fa881"
+                        android:id="@+id/subs_field_max_val"
+                        android:maxLines="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_bg_edit"
+                        android:textCursorDrawable="@drawable/bg_input_cursor"
+                        android:paddingBottom="2dp"
+                        />
+                </android.support.design.widget.TextInputLayout>
 
+
+            </com.github.aakira.expandablelayout.ExpandableLinearLayout>
+
+            <TextView
+                android:clickable="true"
+                android:id="@+id/subs_button"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:text="@string/subscribe"
+                android:textSize="25sp"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/colorAccent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

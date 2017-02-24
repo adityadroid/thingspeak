@@ -222,6 +222,7 @@ public class HomeActivity extends AppCompatActivity {
         if(value==0){
 
             Firebase firebaseChild =firebase.child(mAuth.getCurrentUser().getUid()).child("channels");
+
             firebaseChild.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

@@ -1,17 +1,24 @@
 package aditya.thingspeak.activities;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
 
 import aditya.thingspeak.R;
+import aditya.thingspeak.models.SubscriptionObject;
+import aditya.thingspeak.utilities.Constants;
 
 public class FieldGraphActivity extends AppCompatActivity {
 
@@ -20,6 +27,12 @@ public class FieldGraphActivity extends AppCompatActivity {
     String fieldID;
     TextView fieldDetailsTV;
     String fieldLabel;
+    Firebase firebase;
+    FirebaseAuth mAuth;
+    TextView subscribeButton;
+    EditText etMinVal;
+    EditText etMaxVal;
+    ExpandableLinearLayout expandableLinearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +43,46 @@ public class FieldGraphActivity extends AppCompatActivity {
         fieldLabel = getIntent().getExtras().getString("fieldlabel");
         webView = (WebView)findViewById(R.id.webview);
         fieldDetailsTV= (TextView)findViewById(R.id.attr_details_text);
+        subscribeButton= (TextView)findViewById(R.id.subs_button);
+        etMinVal = (EditText)findViewById(R.id.subs_field_min_val);
+        etMaxVal = (EditText)findViewById(R.id.subs_field_max_val);
+        expandableLinearLayout = (ExpandableLinearLayout)findViewById(R.id.subs_expandable_layout);
+
         fieldDetailsTV.setText(fieldLabel.toUpperCase());
         webView.getSettings().setJavaScriptEnabled(true);
         String html = "<iframe width=\"300\" height=\"300\" style=\"border: 1px solid #cccccc;\" src=\"http://api.thingspeak.com/channels/"+channelID+"/charts/"+fieldID+"?width=300&height=300&results=60&dynamic=true\" ></iframe>";
         Log.d("url",html);
         webView.loadData(html, "text/html", null);
+        Firebase.setAndroidContext(getApplicationContext());
+        firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
+        mAuth = FirebaseAuth.getInstance();
 
 
+
+        subscribeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!expandableLinearLayout.isExpanded())
+                    expandableLinearLayout.expand();
+                else{
+                    if(etMaxVal.getText().toString().isEmpty()||etMinVal.getText().toString().isEmpty()){
+                        Snackbar.make(subscribeButton,"One or more fields empty!",Snackbar.LENGTH_SHORT).show();
+                    }else{
+
+                        SubscriptionObject subscriptionObject = new SubscriptionObject();
+                        subscriptionObject.setFieldID(fieldID);
+                        subscriptionObject.setFieldLabel(fieldLabel);
+                        subscriptionObject.setChannelID(channelID);
+                        subscriptionObject.setMaxVal(etMaxVal.getText().toString());
+                        subscriptionObject.setMinVal(etMinVal.getText().toString());
+                        firebase.child(mAuth.getCurrentUser().getUid()).child("subscriptions").push().setValue(subscriptionObject);
+                        etMaxVal.setText("");
+                        etMinVal.setText("");
+                        expandableLinearLayout.collapse();
+                    }
+                }
+            }
+        });
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
