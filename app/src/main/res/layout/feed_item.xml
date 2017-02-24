@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:padding="15dp"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_marginLeft="10dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="234234"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/feed_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+<TextView
+
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentRight="true"
+    android:id="@+id/feed_time"
+    android:layout_width="wrap_content"
+    android:text="2014-02-26T12:42:49-05:00"
+    android:layout_height="wrap_content" />
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/feed_heading"
+        android:textSize="15sp"
+        android:text="field1     :   value"
+        android:id="@+id/feed_values"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

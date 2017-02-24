@@ -1,8 +1,9 @@
-package aditya.thingspeak;
+package aditya.thingspeak.views;
 
 /**
  * Created by adi on 2/23/17.
  */
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import aditya.thingspeak.R;
 import aditya.thingspeak.activities.HomeActivity;
 import aditya.thingspeak.models.ChannelObject;
 
@@ -32,7 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_list_item, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView);
+        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView,context,itemList);
         return rcv;
     }
 

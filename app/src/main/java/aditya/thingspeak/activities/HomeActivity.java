@@ -20,7 +20,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -32,18 +31,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import aditya.thingspeak.models.ChannelAddObject;
 import aditya.thingspeak.models.ChannelObject;
+import aditya.thingspeak.notifications.NotificationEventReceiver;
 import aditya.thingspeak.utilities.Constants;
 import aditya.thingspeak.R;
-import aditya.thingspeak.RecyclerViewAdapter;
+import aditya.thingspeak.views.RecyclerViewAdapter;
 import aditya.thingspeak.utilities.RestClient;
-import aditya.thingspeak.utilities.Utility;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
@@ -205,6 +202,9 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
+        NotificationEventReceiver.setupAlarm(getApplicationContext());
 
     }
 

@@ -42,5 +42,10 @@
         <item>Public</item>
         <item>Personal</item>
     </string-array>
+    <string-array name="feed_array">
+        <item>Details</item>
+        <item>Feed</item>
+    </string-array>
+    <string name="title_activity_channel_details">ChannelDetailsActivity</string>
 
 </resources>

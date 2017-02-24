@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg"
+    android:orientation="vertical"
+
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_channel_details">
+    <org.honorato.multistatetogglebutton.MultiStateToggleButton
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/channel_details_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+
+        mstb:values="@array/feed_array"
+        mstb:mstbPrimaryColor="@color/colorPrimary"
+        mstb:mstbSecondaryColor="@android:color/white"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:padding="10dp"
+        android:background="@drawable/bg"
+        android:layout_width="match_parent"
+        android:id="@+id/channel_details_recycler"
+        android:layout_height="match_parent">
+        <requestFocus/>
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

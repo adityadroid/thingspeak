@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="aditya.thingspeak">
 
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -40,7 +47,28 @@
         <activity
             android:name=".activities.CreateChannel2Activity"
             android:label="@string/title_activity_create_channel2"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.ChannelDetailsActivity"
+            android:label="@string/title_activity_channel_details"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.FieldGraphActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
+        <service
+            android:name=".notifications.NotificationIntentService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver android:name=".notifications.NotificationEventReceiver" />
+        <receiver android:name=".notifications.NotificationServiceStarterReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
