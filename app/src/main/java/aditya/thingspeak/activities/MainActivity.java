@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import aditya.thingspeak.R;
+import aditya.thingspeak.utilities.Settings;
+import aditya.thingspeak.utilities.Utility;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton)findViewById(R.id.fab);
         forgotPasswordTextView= (TextView)findViewById(R.id.forgot_password_textview);
         mAuth = FirebaseAuth.getInstance();
-
+        Settings.setSharedPreference(getApplicationContext(),"notifications","true");
 
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,13 +99,15 @@ public class MainActivity extends AppCompatActivity {
     }
     private boolean validateData(){
         if(etUsername.getText().toString().trim().isEmpty()||etPassword.getText().toString().isEmpty()){
-            Snackbar.make(btGo,"One or more fields empty",Snackbar.LENGTH_SHORT).show();
+            Utility.showSnack(getApplicationContext(),btGo,Utility.FIELD_EMPTY);
             return false;
         }
         return true;
     }
 
     private void signInUser(String email,String password) {
+
+        findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -124,12 +128,14 @@ public class MainActivity extends AppCompatActivity {
                             ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
                             Intent i2 = new Intent(MainActivity.this,HomeActivity.class);
                             startActivity(i2, oc2.toBundle());
+                            finish();
                         }else{
                             Log.d("Failed", "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this,"Failed!",
-                                    Toast.LENGTH_SHORT).show();
+                            Utility.showSnack(getApplicationContext(),btGo,Utility.SOMETHING_WRONG);
+
                         }
 
+                        findViewById(R.id.progressIndicator).setVisibility(View.GONE);
                         // ...
                     }
                 });

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import aditya.thingspeak.R;
-import aditya.thingspeak.SettingsActivity;
+import aditya.thingspeak.activities.SettingsActivity;
 import aditya.thingspeak.models.SubscriptionObject;
 
 /**

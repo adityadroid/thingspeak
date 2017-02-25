@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import aditya.thingspeak.R;
+import aditya.thingspeak.utilities.Utility;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -86,11 +87,11 @@ public class RegisterActivity extends AppCompatActivity {
                 (etPassword.getText().toString().isEmpty()) ||
                 (etRepeatPassword.getText().toString().isEmpty())
                 ){
-            Snackbar.make(registerButton,"One or more fields empty!",Snackbar.LENGTH_SHORT).show();
+            Utility.showSnack(getApplicationContext(), registerButton, Utility.FIELD_EMPTY);
             return false;
         }else{
             if(!etPassword.getText().toString().trim().equals(etRepeatPassword.getText().toString().trim())){
-                Snackbar.make(registerButton,"Passwords don't match!",Snackbar.LENGTH_SHORT).show();
+                Utility.showSnack(getApplicationContext(),registerButton,"Passwords don't match!");
 
                 return false;
             }

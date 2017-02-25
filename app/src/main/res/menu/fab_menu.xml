@@ -10,7 +10,7 @@
         android:title="Create Channel" />
     <item
         android:id="@+id/action_settings"
-        android:icon="@android:drawable/ic_menu_set_as"
+        android:icon="@android:drawable/ic_menu_edit"
         android:title="Settings"/>
     <item
         android:id="@+id/action_sign_out"

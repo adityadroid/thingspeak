@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,8 +7,75 @@
     android:background="@drawable/bg1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.CreateChannel2Activity"
+    android:orientation="vertical"
     tools:showIn="@layout/activity_create_channel2">
 
+
+    <fr.castorflex.android.smoothprogressbar.SmoothProgressBar
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:spb_sections_count="4"
+        app:spb_speed="2.0"
+        app:spb_colors="@array/progress_colors"
+        app:spb_stroke_width="4dp"
+        app:spb_stroke_separator_length="4dp"
+        app:spb_reversed="false"
+        android:id="@+id/progressIndicator"
+        app:spb_interpolator="spb_interpolator_decelerate"
+        app:spb_mirror_mode="false"
+        app:spb_progressiveStart_activated="true"
+        app:spb_progressiveStart_speed="3.4"
+        app:spb_progressiveStop_speed="1.5"
+        />
+
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/expandableLayoutCreateChannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ael_expanded="false"
+        app:ael_duration="500"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:background="@android:color/white"
+        app:ael_interpolator="decelerate"
+        app:ael_orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:elevation="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:text="ID: 123213"
+            android:id="@+id/create_channel_add_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="@string/add"
+                android:clickable="true"
+                android:id="@+id/create_channel_add_channel"
+                android:textColor="@color/colorAccent"
+                android:background="?attr/selectableItemBackground"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
 
     <android.support.v7.widget.CardView
@@ -257,11 +324,5 @@
         </LinearLayout>
     </android.support.v7.widget.CardView>
 
-    <ProgressBar
 
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressIndicator" />
-
-
-</RelativeLayout>
+</LinearLayout>

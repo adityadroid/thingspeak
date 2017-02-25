@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import aditya.thingspeak.R;
+import aditya.thingspeak.utilities.Utility;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
@@ -41,8 +42,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
 
                 if(etEmail.getText().toString().isEmpty()){
-                    Snackbar.make(btResetPwd,"One or more fields empty!",Snackbar.LENGTH_SHORT).show();
 
+                    Utility.showSnack(getApplicationContext(),btResetPwd,Utility.FIELD_EMPTY);
                 }else{
                     emailAddress=etEmail.getText().toString();
                       auth.sendPasswordResetEmail(emailAddress)
@@ -52,10 +53,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                                     findViewById(R.id.progressIndicator).setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Log.d("SENT", "Email sent.");
-                                        Snackbar.make(btResetPwd,"A reset link has been sent to your email.",Snackbar.LENGTH_LONG).show();
+                                        Utility.showSnackLong(getApplicationContext(),btResetPwd,"A reset link has been sent to your mail.");
                                     }
                                     else{
-                                        Snackbar.make(btResetPwd,"Try again!",Snackbar.LENGTH_SHORT).show();
+                                        Utility.showSnack(getApplicationContext(),btResetPwd,Utility.SOMETHING_WRONG);
 
                                     }
                                 }

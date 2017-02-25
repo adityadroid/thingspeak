@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ThingSpeak</string>
+    <string name="app_name">STATTION</string>
     <string name="login_success">login success</string>
     <string name="login">LOGIN</string>
     <string name="Username">Email</string>
@@ -40,7 +40,6 @@
     <string-array name="sort_array">
         <item>My</item>
         <item>Public</item>
-        <item>Personal</item>
     </string-array>
     <string-array name="feed_array">
         <item>Details</item>
@@ -55,4 +54,7 @@
     <string name="update">UPDATE</string>
     <string name="old_password">Old password</string>
     <string name="new_password">New password</string>
+    <string name="refresh_interval">Refresh Interval</string>
+    <string name="manage_ubscriptions">Manage Subscriptions</string>
+    <string name="notifications_enabled">Notifications Enabled</string>
 </resources>

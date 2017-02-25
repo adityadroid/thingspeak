@@ -34,12 +34,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import aditya.thingspeak.SettingsActivity;
 import aditya.thingspeak.models.ChannelAddObject;
 import aditya.thingspeak.models.ChannelObject;
 import aditya.thingspeak.notifications.NotificationEventReceiver;
 import aditya.thingspeak.utilities.Constants;
 import aditya.thingspeak.R;
+import aditya.thingspeak.utilities.Settings;
+import aditya.thingspeak.utilities.Utility;
 import aditya.thingspeak.views.RecyclerViewAdapter;
 import aditya.thingspeak.utilities.RestClient;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
@@ -62,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
     boolean editChannelMode = false;
     int itemClickedPosition;
     public static boolean publicFeed = false;
+    RecyclerView rView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
         tvAddChannelCancel= (TextView)findViewById(R.id.home_add_channel_cancel);
         expandableLinearLayoutHome = (ExpandableRelativeLayout)findViewById(R.id.expandableLayoutHome);
         fabSpeedDial = (FabSpeedDial)findViewById(R.id.fab_speed_dial);
-        RecyclerView rView = (RecyclerView)findViewById(R.id.channel_recycler);
+        rView = (RecyclerView)findViewById(R.id.channel_recycler);
         multiStateToggleButton = (MultiStateToggleButton)findViewById(R.id.home_choose_channel_type);
         Firebase.setAndroidContext(this);
         firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
@@ -128,7 +130,8 @@ public class HomeActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                                 if (firebaseError != null) {
-                                    Snackbar.make(fabSpeedDial, "Something went wrong!", Snackbar.LENGTH_SHORT).show();
+
+                                    Utility.showSnack(getApplicationContext(), rView,Utility.SOMETHING_WRONG);
                                 }
                             }
                         });
@@ -169,7 +172,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (etAddChannelURL.getText().toString().trim().isEmpty() ||
                         etAddChannelID.getText().toString().trim().isEmpty()) {
-                    Snackbar.make(btAddChannelDone, "One or more fields empty!", Snackbar.LENGTH_SHORT).show();
+                    Utility.showSnack(getApplicationContext(),btAddChannelDone,Utility.FIELD_EMPTY);
 
                 } else {
 
@@ -221,6 +224,7 @@ public class HomeActivity extends AppCompatActivity {
                         i2= new Intent(HomeActivity.this,MainActivity.class);
                         i2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i2,oc2.toBundle());
+                        finish();
                         break;
 
                 }
@@ -228,9 +232,11 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
-        NotificationEventReceiver.setupAlarm(getApplicationContext());
-
+        if(!Settings.getSharedPreference(getApplicationContext(),"notifications").equals("")) {
+            if(Boolean.parseBoolean(Settings.getSharedPreference(getApplicationContext(),"notifications"))){
+            NotificationEventReceiver.setupAlarm(getApplicationContext());
+                Log.d("Service","started");
+        }}
     }
 
     public interface EditButtonClickListener
@@ -254,6 +260,7 @@ public class HomeActivity extends AppCompatActivity {
             firebaseChild.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
                     if(multiStateToggleButton.getValue()==0) {
                         channelAddObjects.clear();
                         listOfChannels.clear();
@@ -275,6 +282,8 @@ public class HomeActivity extends AppCompatActivity {
                             new fetchDataAsync(channelAddObject.getChannelID(), channelAddObject.getChannelURL(), false, false).execute();
                         }
                     }
+                    findViewById(R.id.progressIndicator).setVisibility(View.GONE);
+
                 }
 
                 @Override
@@ -309,6 +318,8 @@ public class HomeActivity extends AppCompatActivity {
         }
         @Override
         protected void onPreExecute() {
+            findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
+
             if(channelID.equals("-1")) {
                 restClient = new RestClient(Constants.CHANNEL_BASE_URL + "/public.json");
             }else{
@@ -333,6 +344,8 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Object o) {
+            findViewById(R.id.progressIndicator).setVisibility(View.GONE);
+
             if(result !=null&&status==200){
                 Log.d("result",result);
                 try {
@@ -475,44 +488,12 @@ public class HomeActivity extends AppCompatActivity {
                 if(checkChannelExists){
                     message = "Channel doesn't exist";
                 }
-                Snackbar.make(fabSpeedDial,message,Snackbar.LENGTH_SHORT).show();
+                Utility.showSnack(getApplicationContext(),fabSpeedDial,message);
             }
             super.onPostExecute(o);
         }
     }
 
-
-
-    public class getUserChannelsAsync extends AsyncTask{
-        String result;
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        public getUserChannelsAsync(List<String> channelList){
-
-        }
-        @Override
-        protected Object doInBackground(Object[] params) {
-            RestClient restClient= new RestClient(Constants.CHANNEL_BASE_URL+"1417"+".json");
-            restClient.addParam("api_key",Constants.API_KEY);
-            try {
-                restClient.executeGet();
-                String result = restClient.getResponse();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            Log.d("Res",result);
-            super.onPostExecute(o);
-        }
-    }
 
 
 

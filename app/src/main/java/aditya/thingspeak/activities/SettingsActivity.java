@@ -1,5 +1,6 @@
-package aditya.thingspeak;
+package aditya.thingspeak.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -7,10 +8,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -27,8 +32,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
+import aditya.thingspeak.R;
 import aditya.thingspeak.models.SubscriptionObject;
+import aditya.thingspeak.notifications.NotificationEventReceiver;
+import aditya.thingspeak.notifications.NotificationIntentService;
 import aditya.thingspeak.utilities.Constants;
+import aditya.thingspeak.utilities.Settings;
+import aditya.thingspeak.utilities.Utility;
 import aditya.thingspeak.views.RVSubsAdapter;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -44,6 +54,10 @@ public class SettingsActivity extends AppCompatActivity {
     EditText oldPwd, newPwd;
     Button changePwdButton;
     TextView cancelPwdButton;
+    NumberPicker refreshIntervalPicker;
+    SwitchCompat notificationsSwitch;
+    boolean notificationsEnabled;
+    int refreshInterval=10;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +72,43 @@ public class SettingsActivity extends AppCompatActivity {
         changePwdButton = (Button)findViewById(R.id.settings_pwd_update);
         oldPwd= (EditText)findViewById(R.id.settings_old_pwd);
         newPwd = (EditText)findViewById(R.id.settings_new_pwd);
+        refreshIntervalPicker = (NumberPicker)findViewById(R.id.settings_number_picker);
+        notificationsSwitch = (SwitchCompat)findViewById(R.id.settings_notifications_enabled);
+        notificationsEnabled=true;
+        if(!Settings.getSharedPreference(getApplicationContext(),"notifications").equals("")){
+            notificationsEnabled = Boolean.parseBoolean(Settings.getSharedPreference(getApplicationContext(),"notifications"));
+
+        }
+        Log.d("ntooff",""+notificationsEnabled);
+        notificationsSwitch.setChecked(notificationsEnabled);
+        refreshIntervalPicker.setMinValue(0);
+        refreshIntervalPicker.setMaxValue(300);
+        if(!Settings.getSharedPreference(getApplicationContext(),"refreshinterval").equals("")){
+
+            Log.d("ri","not null");
+
+            refreshInterval= Integer.parseInt(Settings.getSharedPreference(getApplicationContext(),"refreshinterval"));
+            Log.d("rfrsointrvl",refreshInterval+"");
+        }
+        refreshIntervalPicker.setValue(refreshInterval);
+
+
+        notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+              switchNotificationService(isChecked);
+            }
+        });
+
+         refreshIntervalPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+                    Settings.setSharedPreference(getApplicationContext(),"refreshinterval",String.valueOf(newVal));
+
+            }
+        });
+
         Firebase.setAndroidContext(getApplicationContext());
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP+"/"+mAuth.getCurrentUser().getUid());
@@ -82,7 +133,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(oldPwd.getText().toString().trim().isEmpty()|| newPwd.getText().toString().trim().isEmpty()){
-                    Snackbar.make(settingsChangePwd,"One or more fields empty!",Snackbar.LENGTH_SHORT).show();
+                    Utility.showSnack(getApplicationContext(),settingsChangePwd,Utility.FIELD_EMPTY);
                 }
                 else{
 
@@ -95,7 +146,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 newPwd.setText("");
                                 expandableRelativeLayout.collapse();
                             }else{
-                                Snackbar.make(settingsChangePwd,"Incorrect password!",Snackbar.LENGTH_SHORT).show();
+                                Utility.showSnack(getApplicationContext(),settingsChangePwd,"Incorrect password!");
                             }
                         }
                     });
@@ -154,6 +205,16 @@ public class SettingsActivity extends AppCompatActivity {
         settingsRecycler.setAdapter(adapter);
 
 
+    }
+
+    private void switchNotificationService(boolean isChecked) {
+        if(!isChecked){
+            Settings.setSharedPreference(getApplicationContext(),"notifications",isChecked+"");
+            stopService(new Intent(getApplicationContext(),NotificationIntentService.class));
+        }else{
+            Settings.setSharedPreference(getApplicationContext(),"notifications",isChecked+"");
+            NotificationEventReceiver.setupAlarm(getApplicationContext());
+        }
     }
 
     public interface  ClickListener{

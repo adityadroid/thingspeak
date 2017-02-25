@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +58,7 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
         fireBase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
         verifyOTPButton= (Button)findViewById(R.id.bt_verify_otp);
         initiateVerification();
-        registerUserToFireBase();
+       // registerUserToFireBase();
 
         verifyOTPButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,9 +85,8 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
 
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0])) {
-                Toast.makeText(this, "This application needs permission to read your SMS to automatically verify your "
-                        + "phone, you may disable the permission once you have been verified.", Toast.LENGTH_LONG)
-                        .show();
+                Utility.showSnack(getApplicationContext(), verifyOTPButton, "This application needs permission to read your SMS to automatically verify your "
+                        + "phone, you may disable the permission once you have been verified.");
             }
         }
         initiateVerificationAndSuppressPermissionCheck();
@@ -106,13 +104,14 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
         Intent intent = getIntent();
         if (intent != null) {
             phoneNumber = intent.getStringExtra("INTENT_PHONENUMBER");
+            Log.d("number",phoneNumber);
             countryCode = "91";
             userEmail= intent.getExtras().getString("INTENT_EMAIL");
             userPassword= intent.getExtras().getString("INTENT_PASSWORD");
 
             Log.d("number:",phoneNumber);
 
-              //  createVerification(phoneNumber, skipPermissionCheck, countryCode);
+                createVerification(phoneNumber, skipPermissionCheck, countryCode);
         }
     }
 
@@ -137,13 +136,12 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
     }
 
     void hideProgressBar() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressIndicator);
-        progressBar.setVisibility(View.INVISIBLE);
+
+                findViewById(R.id.progressIndicator).setVisibility(View.INVISIBLE);
     }
 
     void showProgress() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressIndicator);
-        progressBar.setVisibility(View.VISIBLE);
+  findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
     }
 
     void showCompleted() {
@@ -171,10 +169,12 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
 
     private void registerUserToFireBase() {
 
+        findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        findViewById(R.id.progressIndicator).setVisibility(View.GONE);
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
@@ -185,11 +185,14 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
 
                            // fireBase.child(Utility.encodeEmail(userEmail)).setValue(phoneNumber);
                             fireBase.child(mAuth.getCurrentUser().getUid()).child("mobile").setValue(phoneNumber);
-                            Toast.makeText(OTPVerifyActivity.this, "Pushed to firebase!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(OTPVerifyActivity.this, HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                            finish();
 
 
                         }else{
-                            Snackbar.make(verifyOTPButton,"Error!",Snackbar.LENGTH_SHORT).show();
+                            Utility.showSnack(getApplicationContext(),verifyOTPButton,Utility.SOMETHING_WRONG);
                         }
 
 

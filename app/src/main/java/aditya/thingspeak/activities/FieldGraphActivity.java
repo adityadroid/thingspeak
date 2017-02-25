@@ -1,5 +1,6 @@
 package aditya.thingspeak.activities;
 
+import android.graphics.Bitmap;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +54,9 @@ public class FieldGraphActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         String html = "<iframe width=\"300\" height=\"300\" style=\"border: 1px solid #cccccc;\" src=\"http://api.thingspeak.com/channels/"+channelID+"/charts/"+fieldID+"?width=300&height=300&results=60&dynamic=true\" ></iframe>";
         Log.d("url",html);
+        webView.setWebViewClient(new webClient());
         webView.loadData(html, "text/html", null);
+
         Firebase.setAndroidContext(getApplicationContext());
         firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
         mAuth = FirebaseAuth.getInstance();
@@ -62,6 +66,7 @@ public class FieldGraphActivity extends AppCompatActivity {
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
                 if(!expandableLinearLayout.isExpanded())
                     expandableLinearLayout.expand();
                 else{
@@ -81,10 +86,15 @@ public class FieldGraphActivity extends AppCompatActivity {
 
                         etMaxVal.setText("");
                         etMinVal.setText("");
+
                         expandableLinearLayout.collapse();
                     }
+
                 }
+                findViewById(R.id.progressIndicator).setVisibility(View.GONE);
+
             }
+
         });
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -94,5 +104,22 @@ public class FieldGraphActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public class webClient extends WebViewClient{
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            findViewById(R.id.progressIndicator).setVisibility(View.VISIBLE);
+
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            findViewById(R.id.progressIndicator).setVisibility(View.GONE);
+
+            super.onPageFinished(view, url);
+        }
     }
 }

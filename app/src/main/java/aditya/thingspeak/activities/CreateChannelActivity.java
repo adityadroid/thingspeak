@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import aditya.thingspeak.R;
+import aditya.thingspeak.utilities.Settings;
+import aditya.thingspeak.utilities.Utility;
 
 public class CreateChannelActivity extends AppCompatActivity {
 
@@ -42,6 +44,8 @@ public class CreateChannelActivity extends AppCompatActivity {
                     i2.putExtra("name",etName.getText().toString().trim());
                     i2.putExtra("desc",etDesc.getText().toString().trim());
                     startActivity(i2, oc2.toBundle());
+                }else{
+                    Utility.showSnack(getApplicationContext(),next,Utility.FIELD_EMPTY);
                 }
             }
         });

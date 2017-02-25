@@ -3,4 +3,10 @@
     <color name="colorPrimaryDark">#0097A7</color>
     <color name="colorPrimary">#00BCD4</color>
     <color name="colorAccent">#FFC107</color>
+    <array name="progress_colors">
+
+        <item>#3498db</item>
+        <item>#d35400</item>
+        <item>#27ae60</item>
+    </array>
 </resources>
