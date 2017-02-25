@@ -3,6 +3,8 @@ package aditya.thingspeak.models;
 /**
  * Created by adi on 2/25/17.
  */
+
+//subscription object to manage subscription details of user
 public class SubscriptionObject {
     public String channelID;
     public String fieldID;

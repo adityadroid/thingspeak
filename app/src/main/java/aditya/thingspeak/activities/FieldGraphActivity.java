@@ -16,11 +16,11 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.squareup.picasso.Picasso;
 
 import aditya.thingspeak.R;
 import aditya.thingspeak.models.SubscriptionObject;
 import aditya.thingspeak.utilities.Constants;
+import aditya.thingspeak.utilities.Utility;
 
 public class FieldGraphActivity extends AppCompatActivity {
 
@@ -40,6 +40,8 @@ public class FieldGraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_field_graph);
 
+
+        //Initialization
         channelID = getIntent().getExtras().getString("channelid");
         fieldID = getIntent().getExtras().getString("fieldid");
         fieldLabel = getIntent().getExtras().getString("fieldlabel");
@@ -50,19 +52,26 @@ public class FieldGraphActivity extends AppCompatActivity {
         etMaxVal = (EditText)findViewById(R.id.subs_field_max_val);
         expandableLinearLayout = (ExpandableLinearLayout)findViewById(R.id.subs_expandable_layout);
 
+
+
         fieldDetailsTV.setText(fieldLabel.toUpperCase());
         webView.getSettings().setJavaScriptEnabled(true);
+
+        //Creating iframe to load the graph into
         String html = "<iframe width=\"300\" height=\"300\" style=\"border: 1px solid #cccccc;\" src=\"http://api.thingspeak.com/channels/"+channelID+"/charts/"+fieldID+"?width=300&height=300&results=60&dynamic=true\" ></iframe>";
         Log.d("url",html);
         webView.setWebViewClient(new webClient());
         webView.loadData(html, "text/html", null);
 
+
+        //initialiing firebase to manage subscriptions
         Firebase.setAndroidContext(getApplicationContext());
         firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
         mAuth = FirebaseAuth.getInstance();
 
 
 
+        //Subscribe to notifications for particular field data change
         subscribeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,6 +97,8 @@ public class FieldGraphActivity extends AppCompatActivity {
                         etMinVal.setText("");
 
                         expandableLinearLayout.collapse();
+                        Utility.showSnack(getApplicationContext(),subscribeButton,Utility.DONE);
+
                     }
 
                 }

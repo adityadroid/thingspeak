@@ -123,6 +123,7 @@ public class NotificationIntentService extends IntentService {
         }
     }
     public void displayNotification(String title, String message,SubscriptionObject object){
+        Log.d("inside","notification builder");
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setContentTitle(title)
                 .setAutoCancel(true)
@@ -178,13 +179,17 @@ public class NotificationIntentService extends IntentService {
                     JSONObject jsonObject = new JSONObject(result);
                     String fieldVal = jsonObject.getJSONArray("feeds").getJSONObject(0).getString("field"+subscriptionObject.getFieldID());
                     Log.d("fieldVal",fieldVal);
-                    if(Utility.isInteger(fieldVal)){
-                    int value = Integer.parseInt(fieldVal);
-                    if(value>Integer.parseInt(subscriptionObject.maxVal)|| value<Integer.parseInt(subscriptionObject.minVal)){
-                        displayNotification(subscriptionObject.getFieldLabel(),"Field"+subscriptionObject.getFieldID()+" from channel "+subscriptionObject.getChannelID()+" changed to "+fieldVal,subscriptionObject);
+                   // if(Utility.isInteger(fieldVal)){
+                    try {
+                        float value = Float.parseFloat(fieldVal);
+                        if (value > Integer.parseInt(subscriptionObject.maxVal) || value < Integer.parseInt(subscriptionObject.minVal)) {
+                            Log.d("inside", "notification builder");
+                            displayNotification(subscriptionObject.getFieldLabel(), "Field" + subscriptionObject.getFieldID() + " from channel " + subscriptionObject.getChannelID() + " changed to " + fieldVal, subscriptionObject);
+                        }
+                    }catch (NumberFormatException e){
+                        e.printStackTrace();
                     }
-
-                    }
+                  //  }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

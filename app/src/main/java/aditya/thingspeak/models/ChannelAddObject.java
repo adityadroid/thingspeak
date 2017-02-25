@@ -3,6 +3,9 @@ package aditya.thingspeak.models;
 /**
  * Created by adi on 2/24/17.
  */
+
+
+//Model containing details of user channels
 public class ChannelAddObject {
     public String channelID;
     public String channelURL;

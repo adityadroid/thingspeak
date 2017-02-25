@@ -34,6 +34,8 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        //initialization
         fab = (FloatingActionButton)findViewById(R.id.fab);
         cvAdd = (CardView)findViewById(R.id.cv_add);
         registerButton= (Button)findViewById(R.id.bt_register);

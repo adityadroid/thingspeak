@@ -3,6 +3,8 @@ package aditya.thingspeak.models;
 /**
  * Created by adi on 2/24/17.
  */
+
+//Feed model to display feed details on channel details activity
 public class FeedObject {
     public String feedHeading;
     public String feedContent;

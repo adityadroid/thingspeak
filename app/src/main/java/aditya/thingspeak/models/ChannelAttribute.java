@@ -3,6 +3,8 @@ package aditya.thingspeak.models;
 /**
  * Created by adi on 2/24/17.
  */
+
+//Key value mapping for channel attributes
 public class ChannelAttribute {
     public String key;
     public String value;

@@ -55,23 +55,35 @@ public class ChannelDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_channel_details);
 
-         channelID = getIntent().getExtras().getString("channelid");
+        //Initialization
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         multiStateToggleButton = (MultiStateToggleButton)findViewById(R.id.channel_details_toggle);
         channelDetailsRecycler = (RecyclerView)findViewById(R.id.channel_details_recycler);
+
+
         gLayout = new GridLayoutManager(ChannelDetailsActivity.this, 2);
         lLayout= new LinearLayoutManager(ChannelDetailsActivity.this);
         lLayout.setOrientation(LinearLayoutManager.VERTICAL);
         channelDetailsRecycler.setLayoutManager(gLayout);
+        channelID = getIntent().getExtras().getString("channelid");
         adapter = new ChannelDetailsRVAdapter(ChannelDetailsActivity.this,listOfAttributes,channelID);
         channelDetailsRecycler.setAdapter(adapter);
         feedAdapter = new RVFeedAdapter(ChannelDetailsActivity.this,listOfFeeds);
 
 
+
         if(!Settings.getSharedPreference(getApplicationContext(),"refreshinterval").equals(""))
         refreshInterval = Integer.parseInt(Settings.getSharedPreference(getApplicationContext(),"refreshinterval"));
+        multiStateToggleButton.setValue(0);
+
+
+        //Fetch channel details from thingspeak
 
         new fetchChannelUpdatesAsync(channelID).execute();
+
+
+        //Listen to Feed toggle
 
         multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
             @Override
@@ -86,6 +98,11 @@ public class ChannelDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        //Refresh channel details on fab click
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,17 +112,21 @@ public class ChannelDetailsActivity extends AppCompatActivity {
             }
         });
 
+
+
+
+        //Feed Refresh Timer
         Log.d("interval",refreshInterval+"");
         if(refreshInterval!=0){
 
             feedTimer= new Timer();
             feedTimer.scheduleAtFixedRate(new TimerTask() {
 
-                                      @Override
-                                      public void run() {
-                                          Log.d("Updater","Updating feed");
-                                          new fetchChannelUpdatesAsync(channelID).execute();
-                                      }}, 0, refreshInterval*1000);
+                @Override
+                public void run() {
+                    Log.d("Updater","Updating feed");
+                    new fetchChannelUpdatesAsync(channelID).execute();
+                }}, 0, refreshInterval*1000);
 
         }
 
@@ -222,18 +243,16 @@ public class ChannelDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if(feedTimer!=null)
         feedTimer.cancel();
         super.onPause();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected void onStop() {
-        feedTimer.cancel();
+        if(feedTimer!=null)
+            feedTimer.cancel();
         super.onStop();
     }
 }

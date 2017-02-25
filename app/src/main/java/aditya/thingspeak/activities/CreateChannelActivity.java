@@ -22,14 +22,22 @@ public class CreateChannelActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_create_channel);
+
+        //Enter animation
         Explode explode = new Explode();
         explode.setDuration(500);
         getWindow().setExitTransition(explode);
         getWindow().setEnterTransition(explode);
 
+
+        //initialization
+
         etName = (EditText)findViewById(R.id.cc_name);
         etDesc= (EditText)findViewById(R.id.cc_desc);
         next = (Button)findViewById(R.id.cc_next_bt);
+
+
+        //Check the fields for valid data and launch next activity
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -47,7 +47,6 @@ public class NotificationEventReceiver extends WakefulBroadcastReceiver {
     private static long getTriggerAt(Date now) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        //calendar.add(Calendar.HOUR, NOTIFICATIONS_INTERVAL_IN_HOURS);
         return calendar.getTimeInMillis();
     }
 

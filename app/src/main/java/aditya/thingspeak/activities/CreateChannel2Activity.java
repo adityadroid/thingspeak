@@ -42,10 +42,14 @@ public class CreateChannel2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_channel2);
+
+        //Enter animation
         Explode explode = new Explode();
         explode.setDuration(500);
         getWindow().setExitTransition(explode);
         getWindow().setEnterTransition(explode);
+
+        //Initialization
         Firebase.setAndroidContext(getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
         firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
@@ -61,11 +65,10 @@ public class CreateChannel2Activity extends AppCompatActivity {
         idDisplay = (TextView)findViewById(R.id.create_channel_add_id);
         addChannelButton = (TextView)findViewById(R.id.create_channel_add_channel);
 
-
-
-
-
         fab = (FloatingActionButton) findViewById(R.id.fab_create_channel2);
+
+
+        //Create channel on fab click
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +84,10 @@ public class CreateChannel2Activity extends AppCompatActivity {
                 new createChannel().execute();
             }
         });
+
+
+        //Add the channel to current user feed after creation
+
         addChannelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +97,7 @@ public class CreateChannel2Activity extends AppCompatActivity {
     }
 
     public void addChannel(){
+
         ChannelAddObject obj = new ChannelAddObject(channelID+"", channelURL, "");
 
 
@@ -98,8 +106,11 @@ public class CreateChannel2Activity extends AppCompatActivity {
 
         firebase.child(mAuth.getCurrentUser().getUid()).child("channels").child(pushID).setValue(obj);
         Utility.showSnack(getApplicationContext(),fab,Utility.DONE);
+
+        //Channel created, launch homeactivity
         Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
 

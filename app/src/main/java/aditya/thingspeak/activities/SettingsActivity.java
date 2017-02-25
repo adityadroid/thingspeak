@@ -1,5 +1,7 @@
 package aditya.thingspeak.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -62,8 +64,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_settings);
-        settingsChangePwd = (TextView) findViewById(R.id.settings_change_pwd);
 
+        //initialization
+        settingsChangePwd = (TextView) findViewById(R.id.settings_change_pwd);
         settingsEmail = (TextView)findViewById(R.id.settings_email);
         settingsPhone= (TextView)findViewById(R.id.settings_phone);
         settingsRecycler= (RecyclerView) findViewById(R.id.subs_recycler);
@@ -74,15 +77,25 @@ public class SettingsActivity extends AppCompatActivity {
         newPwd = (EditText)findViewById(R.id.settings_new_pwd);
         refreshIntervalPicker = (NumberPicker)findViewById(R.id.settings_number_picker);
         notificationsSwitch = (SwitchCompat)findViewById(R.id.settings_notifications_enabled);
+        Firebase.setAndroidContext(getApplicationContext());
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP+"/"+mAuth.getCurrentUser().getUid());
+
+
+
         notificationsEnabled=true;
         if(!Settings.getSharedPreference(getApplicationContext(),"notifications").equals("")){
             notificationsEnabled = Boolean.parseBoolean(Settings.getSharedPreference(getApplicationContext(),"notifications"));
 
         }
         Log.d("ntooff",""+notificationsEnabled);
+
+
         notificationsSwitch.setChecked(notificationsEnabled);
         refreshIntervalPicker.setMinValue(0);
         refreshIntervalPicker.setMaxValue(300);
+
+
         if(!Settings.getSharedPreference(getApplicationContext(),"refreshinterval").equals("")){
 
             Log.d("ri","not null");
@@ -90,9 +103,10 @@ public class SettingsActivity extends AppCompatActivity {
             refreshInterval= Integer.parseInt(Settings.getSharedPreference(getApplicationContext(),"refreshinterval"));
             Log.d("rfrsointrvl",refreshInterval+"");
         }
+
+
+
         refreshIntervalPicker.setValue(refreshInterval);
-
-
         notificationsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -109,11 +123,11 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        Firebase.setAndroidContext(getApplicationContext());
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP+"/"+mAuth.getCurrentUser().getUid());
+        //get user email from current user
         final String email = mAuth.getCurrentUser().getEmail();
         settingsEmail.setText(email);
+
+
         settingsChangePwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +159,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 oldPwd.setText("");
                                 newPwd.setText("");
                                 expandableRelativeLayout.collapse();
+                                Utility.showSnack(getApplicationContext(),settingsChangePwd,Utility.DONE);
+
                             }else{
                                 Utility.showSnack(getApplicationContext(),settingsChangePwd,"Incorrect password!");
                             }
@@ -199,10 +215,46 @@ public class SettingsActivity extends AppCompatActivity {
         adapter = new RVSubsAdapter(getApplicationContext(), subscriptionObjects, new ClickListener() {
             @Override
             public void onClick(int position) {
-                firebase.child(subscriptionObjects.get(position).getPushID()).removeValue();
+                deleteChild(position);
             }
         });
         settingsRecycler.setAdapter(adapter);
+
+
+    }
+
+
+
+    private void deleteChild(final int position) {
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        builder.setTitle("Delete");
+        builder.setMessage("Are you sure you want to delete this subscription?");
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                return;
+            }
+        });
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("id",subscriptionObjects.get(position).getPushID());
+                firebase.child("subscriptions").child(subscriptionObjects.get(position).getPushID()).removeValue(new Firebase.CompletionListener() {
+                    @Override
+                    public void onComplete(FirebaseError firebaseError, Firebase firebase) {
+                        if(firebaseError!=null)
+                            Utility.showSnack(getApplicationContext(),settingsChangePwd,Utility.SOMETHING_WRONG);
+                        else
+                            Utility.showSnack(getApplicationContext(),settingsChangePwd,Utility.DONE);
+                    }
+                });
+
+            }
+        });
+        builder.show();
+
 
 
     }

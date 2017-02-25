@@ -47,19 +47,23 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otpverify);
-        mAuth = FirebaseAuth.getInstance();
 
+        //Enter animation
         Explode explode = new Explode();
         explode.setDuration(500);
         getWindow().setExitTransition(explode);
         getWindow().setEnterTransition(explode);
 
+        //initializatio0n
+        mAuth = FirebaseAuth.getInstance();
         Firebase.setAndroidContext(this);
         fireBase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
         verifyOTPButton= (Button)findViewById(R.id.bt_verify_otp);
-        initiateVerification();
-       // registerUserToFireBase();
 
+        //initiate verification process
+        initiateVerification();
+
+        //verifiy otp
         verifyOTPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +191,7 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
                             fireBase.child(mAuth.getCurrentUser().getUid()).child("mobile").setValue(phoneNumber);
                             Intent intent = new Intent(OTPVerifyActivity.this, HomeActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(intent);
                             finish();
 

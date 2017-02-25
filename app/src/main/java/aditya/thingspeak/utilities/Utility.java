@@ -25,56 +25,9 @@ public class Utility {
     public final static String FIELD_EMPTY = "One or more fields empty!";
     public final static String SOMETHING_WRONG = "Something went wrong!";
     public final static String DONE = "Done!";
-    public static String encodeEmail(String email){
-        return email.replace(".","%2E");
-    }
-    public static String decodeEmail(String email){
-        return email.replace("%2E",".");
-    }
-    public static Map<String, Object> jsonToMap(JSONObject json) throws JSONException {
-        Map<String, Object> retMap = new HashMap<String, Object>();
 
-        if(json != JSONObject.NULL) {
-            retMap = toMap(json);
-        }
-        return retMap;
-    }
 
-    public static Map<String, Object> toMap(JSONObject object) throws JSONException {
-        Map<String, Object> map = new HashMap<String, Object>();
 
-        Iterator<String> keysItr = object.keys();
-        while(keysItr.hasNext()) {
-            String key = keysItr.next();
-            Object value = object.get(key);
-
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            map.put(key, value);
-        }
-        return map;
-    }
-
-    public static List<Object> toList(JSONArray array) throws JSONException {
-        List<Object> list = new ArrayList<Object>();
-        for(int i = 0; i < array.length(); i++) {
-            Object value = array.get(i);
-            if(value instanceof JSONArray) {
-                value = toList((JSONArray) value);
-            }
-
-            else if(value instanceof JSONObject) {
-                value = toMap((JSONObject) value);
-            }
-            list.add(value);
-        }
-        return list;
-    }
 
     public static boolean isInteger(String s) {
         return isInteger(s,10);

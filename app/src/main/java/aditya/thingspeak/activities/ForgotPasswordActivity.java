@@ -28,14 +28,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
+
+        //Enter animation
         Explode explode = new Explode();
         explode.setDuration(500);
         getWindow().setExitTransition(explode);
         getWindow().setEnterTransition(explode);
         auth = FirebaseAuth.getInstance();
 
+
+        //Initialization
         etEmail=(EditText)findViewById(R.id.et_email);
         btResetPwd= (Button)findViewById(R.id.bt_reset_pwd);
+
+        //Reset password on button click
         btResetPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,11 +51,18 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
                     Utility.showSnack(getApplicationContext(),btResetPwd,Utility.FIELD_EMPTY);
                 }else{
+
+
                     emailAddress=etEmail.getText().toString();
+
+
+                    //Reset password
                       auth.sendPasswordResetEmail(emailAddress)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
+
+
                                     findViewById(R.id.progressIndicator).setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Log.d("SENT", "Email sent.");

@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText etUsername;
     CardView cv;
     FloatingActionButton fab;
-    FirebaseAuth.AuthStateListener mAuthListener;
     TextView forgotPasswordTextView;
 
 
@@ -44,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialization
         etPassword= (EditText)findViewById(R.id.et_password);
         btGo= (Button) findViewById(R.id.bt_go);
         etUsername= (EditText)findViewById(R.id.et_username);
@@ -51,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton)findViewById(R.id.fab);
         forgotPasswordTextView= (TextView)findViewById(R.id.forgot_password_textview);
         mAuth = FirebaseAuth.getInstance();
+        //Enable notifications on app start (session start)
         Settings.setSharedPreference(getApplicationContext(),"notifications","true");
+
+
 
         forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        //sign in user with uuser credentials
         btGo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

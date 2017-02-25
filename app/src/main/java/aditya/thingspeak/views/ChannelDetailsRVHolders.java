@@ -44,6 +44,7 @@ public class ChannelDetailsRVHolders extends RecyclerView.ViewHolder implements 
         if(key.contains("field")){
             Intent intent = new Intent(context, FieldGraphActivity.class);
             Log.d("key",key.substring(5,key.length())+" "+key);
+            Log.d("channelid",channelID);
             intent.putExtra("fieldid",key.substring(5,key.length()));
             intent.putExtra("channelid",channelID);
             intent.putExtra("fieldlabel",channelAttributes.get(getPosition()).getValue());

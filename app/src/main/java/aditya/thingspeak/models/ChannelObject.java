@@ -3,6 +3,8 @@ package aditya.thingspeak.models;
 /**
  * Created by adi on 2/23/17.
  */
+
+//Channel details object for home recycler
 public class ChannelObject {
     public String channelDesc;
     public String channelName;
