@@ -12,6 +12,7 @@ import java.util.List;
 
 import aditya.thingspeak.R;
 import aditya.thingspeak.activities.FieldGraphActivity;
+import aditya.thingspeak.activities.HomeActivity;
 import aditya.thingspeak.models.ChannelAttribute;
 
 /**
@@ -30,6 +31,7 @@ public class ChannelDetailsRVHolders extends RecyclerView.ViewHolder implements 
         itemView.setOnClickListener(this);
         channelKey= (TextView)itemView.findViewById(R.id.channel_detail_key);
         channelValue = (TextView)itemView.findViewById(R.id.channel_detail_value);
+
         this.context = context;
         this.channelAttributes = channelAttributes;
         this.channelID = channelID;

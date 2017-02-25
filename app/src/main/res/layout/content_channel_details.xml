@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:mstb="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/bg"
+    android:background="@drawable/bg1"
     android:orientation="vertical"
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -23,7 +23,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:padding="10dp"
-        android:background="@drawable/bg"
+        android:background="@drawable/bg1"
         android:layout_width="match_parent"
         android:id="@+id/channel_details_recycler"
         android:layout_height="match_parent">

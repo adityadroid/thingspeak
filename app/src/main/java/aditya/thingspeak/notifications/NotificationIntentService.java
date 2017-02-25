@@ -51,6 +51,14 @@ public class NotificationIntentService extends IntentService {
         return intent;
     }
 
+    @Override
+    public void onDestroy() {
+        Intent intent = new Intent("com.aditya.thingspeak");
+        Log.d("destroyed","destroyed");
+        sendBroadcast(intent);
+        super.onDestroy();
+    }
+
     public static Intent createIntentDeleteNotification(Context context) {
         Intent intent = new Intent(context, NotificationIntentService.class);
         intent.setAction(ACTION_DELETE);
@@ -83,36 +91,36 @@ public class NotificationIntentService extends IntentService {
         // Do something. For example, fetch fresh data from backend to create a rich notification?
         Firebase.setAndroidContext(getApplicationContext());
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        Firebase firebase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP+"/"+mAuth.getCurrentUser().getUid()+"/subscriptions");
-        firebase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                subscriptionObjects.clear();
-                for(DataSnapshot subsItem : dataSnapshot.getChildren())
-                {
-                    SubscriptionObject subscriptionObject = new SubscriptionObject();
-                    subscriptionObject.setChannelID(subsItem.child("channelID").getValue().toString());
-                    subscriptionObject.setFieldID(subsItem.child("fieldID").getValue().toString());
-                    subscriptionObject.setMaxVal(subsItem.child("maxVal").getValue().toString());
-                    subscriptionObject.setMinVal(subsItem.child("minVal").getValue().toString());
-                    subscriptionObject.setFieldLabel(subsItem.child("fieldLabel").getValue().toString());
-                    subscriptionObjects.add(subscriptionObject);
+        if(mAuth.getCurrentUser()!=null) {
+            Firebase firebase = new Firebase(Constants.BASE_URL + Constants.USERS_MAP + "/" + mAuth.getCurrentUser().getUid() + "/subscriptions");
+            firebase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    subscriptionObjects.clear();
+                    for (DataSnapshot subsItem : dataSnapshot.getChildren()) {
+                        SubscriptionObject subscriptionObject = new SubscriptionObject();
+                        subscriptionObject.setChannelID(subsItem.child("channelID").getValue().toString());
+                        subscriptionObject.setFieldID(subsItem.child("fieldID").getValue().toString());
+                        subscriptionObject.setMaxVal(subsItem.child("maxVal").getValue().toString());
+                        subscriptionObject.setMinVal(subsItem.child("minVal").getValue().toString());
+                        subscriptionObject.setFieldLabel(subsItem.child("fieldLabel").getValue().toString());
+                        subscriptionObjects.add(subscriptionObject);
 
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
                 }
+            });
+            for (SubscriptionObject object : subscriptionObjects) {
+                new fetchNotification(object).execute();
             }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
-        for(SubscriptionObject object : subscriptionObjects){
-            new fetchNotification(object).execute();
         }
-
-
-
     }
     public void displayNotification(String title, String message,SubscriptionObject object){
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);

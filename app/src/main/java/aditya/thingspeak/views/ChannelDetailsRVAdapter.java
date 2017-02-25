@@ -39,6 +39,7 @@ public class ChannelDetailsRVAdapter extends RecyclerView.Adapter<ChannelDetails
     public void onBindViewHolder(ChannelDetailsRVHolders holder, final int position) {
         holder.channelKey.setText(channelAttributeList.get(position).getKey()+":");
         holder.channelValue.setText(channelAttributeList.get(position).getValue());
+
         if(channelAttributeList.get(position).getKey().equals("description"))
         {
             holder.channelValue.setTextSize(20);

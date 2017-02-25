@@ -56,7 +56,7 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
         getWindow().setEnterTransition(explode);
 
         Firebase.setAndroidContext(this);
-        fireBase = new Firebase(Constants.BASE_URL+Constants.PHONE_EMAIL_MAP);
+        fireBase = new Firebase(Constants.BASE_URL+Constants.USERS_MAP);
         verifyOTPButton= (Button)findViewById(R.id.bt_verify_otp);
         initiateVerification();
         registerUserToFireBase();
@@ -183,7 +183,8 @@ public class OTPVerifyActivity extends AppCompatActivity implements ActivityComp
                         if (task.isSuccessful()) {
                             //Map the user email and phone number
 
-                            fireBase.child(Utility.encodeEmail(userEmail)).setValue(phoneNumber);
+                           // fireBase.child(Utility.encodeEmail(userEmail)).setValue(phoneNumber);
+                            fireBase.child(mAuth.getCurrentUser().getUid()).child("mobile").setValue(phoneNumber);
                             Toast.makeText(OTPVerifyActivity.this, "Pushed to firebase!", Toast.LENGTH_SHORT).show();
 
 

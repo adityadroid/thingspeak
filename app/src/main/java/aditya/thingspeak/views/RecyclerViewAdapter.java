@@ -22,12 +22,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
     private Context context;
     private HomeActivity.EditButtonClickListener listener;
     private HomeActivity.EditButtonClickListener deletelistener;
+    private  HomeActivity.EditButtonClickListener addlistener;
 
-    public RecyclerViewAdapter(Context context, List<ChannelObject> itemList, HomeActivity.EditButtonClickListener listener,HomeActivity.EditButtonClickListener deletelistener) {
+    public RecyclerViewAdapter(Context context, List<ChannelObject> itemList, HomeActivity.EditButtonClickListener listener, HomeActivity.EditButtonClickListener deletelistener, HomeActivity.EditButtonClickListener addlistener) {
         this.itemList = itemList;
         this.context = context;
         this.listener= listener;
         this.deletelistener= deletelistener;
+        this.addlistener = addlistener;
     }
 
     @Override
@@ -60,7 +62,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder
 
             }
         });
+        holder.addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addlistener.itemClicked(position);
+            }
+        });
 
+        if(HomeActivity.publicFeed){
+            holder.myFeedBtLayout.setVisibility(View.GONE);
+            holder.publicBtLayout.setVisibility(View.VISIBLE);
+        }else{
+
+            holder.myFeedBtLayout.setVisibility(View.VISIBLE);
+            holder.publicBtLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override

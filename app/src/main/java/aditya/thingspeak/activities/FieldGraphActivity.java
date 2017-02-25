@@ -75,7 +75,10 @@ public class FieldGraphActivity extends AppCompatActivity {
                         subscriptionObject.setChannelID(channelID);
                         subscriptionObject.setMaxVal(etMaxVal.getText().toString());
                         subscriptionObject.setMinVal(etMinVal.getText().toString());
-                        firebase.child(mAuth.getCurrentUser().getUid()).child("subscriptions").push().setValue(subscriptionObject);
+                        String pushID= firebase.child(mAuth.getCurrentUser().getUid()).child("subscriptions").push().getKey();
+                        subscriptionObject.setPushID(pushID);
+                        firebase.child(mAuth.getCurrentUser().getUid()).child("subscriptions").child(pushID).setValue(subscriptionObject);
+
                         etMaxVal.setText("");
                         etMinVal.setText("");
                         expandableLinearLayout.collapse();

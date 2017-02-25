@@ -12,5 +12,6 @@ public final class NotificationServiceStarterReceiver extends BroadcastReceiver 
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationEventReceiver.setupAlarm(context);
+
     }
 }

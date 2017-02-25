@@ -50,4 +50,9 @@
     <string name="min_value">Minimum Value</string>
     <string name="max_value">Maximum Value</string>
     <string name="subscribe">SUBSCRIBE</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="add">ADD</string>
+    <string name="update">UPDATE</string>
+    <string name="old_password">Old password</string>
+    <string name="new_password">New password</string>
 </resources>

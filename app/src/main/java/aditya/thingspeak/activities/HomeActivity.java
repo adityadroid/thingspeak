@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import aditya.thingspeak.SettingsActivity;
 import aditya.thingspeak.models.ChannelAddObject;
 import aditya.thingspeak.models.ChannelObject;
 import aditya.thingspeak.notifications.NotificationEventReceiver;
@@ -60,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
     List<ChannelAddObject> channelAddObjects = new ArrayList<>();
     boolean editChannelMode = false;
     int itemClickedPosition;
+    public static boolean publicFeed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,11 @@ public class HomeActivity extends AppCompatActivity {
         multiStateToggleButton.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
             @Override
             public void onValueChanged(int value) {
+                if(value==0){
+                    publicFeed = false;
+                }else{
+                    publicFeed = true;
+                }
                 resetRecycerFetchData(value);
             }
         });
@@ -101,6 +108,7 @@ public class HomeActivity extends AppCompatActivity {
         rcAdapter = new RecyclerViewAdapter(HomeActivity.this, listOfChannels, new EditButtonClickListener() {
             @Override
             public void itemClicked(int position) {
+                //Perform Edit actions
                 expandableLinearLayoutHome.expand();
                 editChannelMode = true;
                 itemClickedPosition = position;
@@ -112,16 +120,31 @@ public class HomeActivity extends AppCompatActivity {
                 new EditButtonClickListener() {
                     @Override
                     public void itemClicked(int position) {
+
+                        //Perform Delete Actions
+
+
                         firebase.child(mAuth.getCurrentUser().getUid()).child("channels").child(channelAddObjects.get(position).getChannelPushID()).removeValue(new Firebase.CompletionListener() {
                             @Override
                             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
-                                if(firebaseError!=null){
-                                    Snackbar.make(fabSpeedDial,"Something went wrong!",Snackbar.LENGTH_SHORT).show();
+                                if (firebaseError != null) {
+                                    Snackbar.make(fabSpeedDial, "Something went wrong!", Snackbar.LENGTH_SHORT).show();
                                 }
                             }
                         });
 
                     }
+                },
+                new EditButtonClickListener() {
+                    @Override
+                    public void itemClicked(int position) {
+
+                        //Perform Add Actions
+                        Log.d("id",listOfChannels.get(position).getChannelID());
+                        new fetchDataAsync(listOfChannels.get(position).getChannelID(),"",true, false).execute();
+
+
+                        }
                 }
 
         );
@@ -151,12 +174,12 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
 
                     if(editChannelMode){
-                       new fetchDataAsync(etAddChannelID.getText().toString(),true,true).execute();
+                       new fetchDataAsync(etAddChannelID.getText().toString().trim(),etAddChannelURL.getText().toString().trim(),true,true).execute();
 
                          }else {
 
 
-                        new fetchDataAsync(etAddChannelID.getText().toString(), true,false).execute();
+                        new fetchDataAsync(etAddChannelID.getText().toString().trim(),etAddChannelURL.getText().toString().trim(), true,false).execute();
                     }
                 }
             }
@@ -166,26 +189,20 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 //TODO: Start some activity
+                Explode explode = new Explode();
+                explode.setDuration(500);
+
+                getWindow().setExitTransition(explode);
+                getWindow().setEnterTransition(explode);
+                ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this);
+                Intent i2;
+
                 switch (menuItem.getItemId())
                 {
-                    case R.id.action_create_channel:
-//                        mFirstDemoActSwitchAnimTool = new ActSwitchAnimTool(getActivity()).setAnimType(ActSwitchAnimTool.MODE_SPREAD)
-//                                .target(view)
-//                                .setShrinkBack(true)
-//                                .setmColorStart(getResources().getColor(R.color.transition_start))
-//                                .setmColorEnd(getResources().getColor(R.color.colorPrimary))
-//                                .startActivity(intent, false);
-//
-//
-//                        mFirstDemoActSwitchAnimTool.setAnimType(ActSwitchAnimTool.MODE_SPREAD)
-//                                .build();
-                        Explode explode = new Explode();
-                        explode.setDuration(500);
 
-                        getWindow().setExitTransition(explode);
-                        getWindow().setEnterTransition(explode);
-                        ActivityOptionsCompat oc2 = ActivityOptionsCompat.makeSceneTransitionAnimation(HomeActivity.this);
-                        Intent i2 = new Intent(HomeActivity.this,CreateChannelActivity.class);
+                    case R.id.action_create_channel:
+
+                        i2 = new Intent(HomeActivity.this,CreateChannelActivity.class);
                         startActivity(i2, oc2.toBundle());
 
 
@@ -195,7 +212,15 @@ public class HomeActivity extends AppCompatActivity {
                         expandableLinearLayoutHome.expand();
                         break;
                     case R.id.action_settings:
+                         i2 = new Intent(HomeActivity.this, SettingsActivity.class);
+                        startActivity(i2, oc2.toBundle());
 
+                        break;
+                    case R.id.action_sign_out:
+                        mAuth.signOut();
+                        i2= new Intent(HomeActivity.this,MainActivity.class);
+                        i2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i2,oc2.toBundle());
                         break;
 
                 }
@@ -216,35 +241,39 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void resetRecycerFetchData(int value) {
+
         listOfChannels.clear();
+        channelAddObjects.clear();
         rcAdapter.notifyDataSetChanged();
 
         if(value==0){
 
             Firebase firebaseChild =firebase.child(mAuth.getCurrentUser().getUid()).child("channels");
 
+
             firebaseChild.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    channelAddObjects.clear();
-                    listOfChannels.clear();
-                    rcAdapter.notifyDataSetChanged();
-                    for(DataSnapshot channelItem : dataSnapshot.getChildren())
-                    {
-                        ChannelAddObject channelAddObject = new ChannelAddObject();
-                        channelAddObject.setChannelID(channelItem.child("channelID").getValue().toString());
-                        channelAddObject.setChannelURL(channelItem.child("channelURL").getValue().toString());
-                        channelAddObject.setChannelPushID(channelItem.getKey());
-                        if(!channelAddObjects.contains(channelAddObject)) {
-                            channelAddObjects.add(channelAddObject);
-                            Log.d("channel", channelAddObject.getChannelID().toString());
-                            Log.d("PushKey",channelItem.getKey());
+                    if(multiStateToggleButton.getValue()==0) {
+                        channelAddObjects.clear();
+                        listOfChannels.clear();
+                        rcAdapter.notifyDataSetChanged();
+                        for (DataSnapshot channelItem : dataSnapshot.getChildren()) {
+                            ChannelAddObject channelAddObject = new ChannelAddObject();
+                            channelAddObject.setChannelID(channelItem.child("channelID").getValue().toString());
+                            channelAddObject.setChannelURL(channelItem.child("channelURL").getValue().toString());
+                            channelAddObject.setChannelPushID(channelItem.getKey());
+                            if (!channelAddObjects.contains(channelAddObject)) {
+                                channelAddObjects.add(channelAddObject);
+                                Log.d("channel", channelAddObject.getChannelID().toString());
+                                Log.d("PushKey", channelItem.getKey());
+                            }
+
                         }
 
-                    }
-
-                    for(ChannelAddObject channelAddObject : channelAddObjects){
-                        new fetchDataAsync(channelAddObject.getChannelID(),false,false).execute();
+                        for (ChannelAddObject channelAddObject : channelAddObjects) {
+                            new fetchDataAsync(channelAddObject.getChannelID(), channelAddObject.getChannelURL(), false, false).execute();
+                        }
                     }
                 }
 
@@ -256,7 +285,7 @@ public class HomeActivity extends AppCompatActivity {
 
         }
         else if(value==1){
-            new fetchDataAsync("-1",false,false).execute();
+            new fetchDataAsync("-1","",false,false).execute();
         }else{
 
         }
@@ -271,10 +300,12 @@ public class HomeActivity extends AppCompatActivity {
         int status;
         boolean checkChannelExists = false;
         boolean editModeEnabled = false;
-        public fetchDataAsync(String channelID,boolean checkChannelExists, boolean editModeEnabled){
+        String channelURL;
+        public fetchDataAsync(String channelID,String channelURL,boolean checkChannelExists, boolean editModeEnabled){
             this.channelID = channelID;
             this.checkChannelExists = checkChannelExists;
             this.editModeEnabled = editModeEnabled;
+            this.channelURL = channelURL;
         }
         @Override
         protected void onPreExecute() {
@@ -413,10 +444,13 @@ public class HomeActivity extends AppCompatActivity {
                                 firebaseChild.child("channelURL").setValue(etAddChannelURL.getText().toString().trim());
 
                             }else {
-                                ChannelAddObject obj = new ChannelAddObject(etAddChannelID.getText().toString().trim(), etAddChannelURL.getText().toString().trim(), "");
+                                ChannelAddObject obj = new ChannelAddObject(channelID, channelURL, "");
 
 
-                                firebase.child(mAuth.getCurrentUser().getUid()).child("channels").push().setValue(obj);
+                                String pushID = firebase.child(mAuth.getCurrentUser().getUid()).child("channels").push().getKey();
+                                    obj.setChannelPushID(pushID);
+
+                                firebase.child(mAuth.getCurrentUser().getUid()).child("channels").child(pushID).setValue(obj);
                             }
                             etAddChannelID.setText("");
                             etAddChannelURL.setText("");

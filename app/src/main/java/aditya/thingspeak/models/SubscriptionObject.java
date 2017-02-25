@@ -9,12 +9,22 @@ public class SubscriptionObject {
     public String maxVal;
     public String minVal;
     public String fieldLabel;
-    public SubscriptionObject(String channelID,String fieldID, String maxVal, String minVal,String fieldLabel){
+    public String pushID;
+    public SubscriptionObject(String channelID,String fieldID, String maxVal, String minVal,String fieldLabel,String pushID){
         this.channelID = channelID;
         this.fieldID = fieldID;
         this.maxVal = maxVal;
         this.minVal = minVal;
         this.fieldLabel = fieldLabel;
+        this.pushID = pushID;
+    }
+
+    public String getPushID() {
+        return pushID;
+    }
+
+    public void setPushID(String pushID) {
+        this.pushID = pushID;
     }
 
     public String getFieldLabel() {
